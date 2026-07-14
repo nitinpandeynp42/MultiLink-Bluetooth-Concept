@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MultiLink — Connect Everything. Simultaneously.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#050a16;
+  --bg-2:#080f22;
+  --surface:rgba(255,255,255,0.045);
+  --surface-border:rgba(255,255,255,0.09);
+  --neon:#4f9cff;
+  --neon-2:#22d3ee;
+  --neon-soft:rgba(79,156,255,0.35);
+  --text:#eaf1ff;
+  --text-dim:#8a96b3;
+  --text-dimmer:#5b6683;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(79,156,255,0.18), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 10%, rgba(34,211,238,0.10), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+/* ---------- nav dots ---------- */
+.progress-rail{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:14px;}
+.progress-rail span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.18);transition:all .4s;}
+.progress-rail span.active{background:var(--neon);box-shadow:0 0 10px var(--neon);height:22px;}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:120px 24px 80px;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--neon-2);border:1px solid rgba(34,211,238,0.3);padding:6px 16px;border-radius:100px;
+  background:rgba(34,211,238,0.06); margin-bottom:36px; opacity:0; animation:fadeUp .8s ease forwards .1s;
+}
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(48px,9vw,104px);line-height:0.98;letter-spacing:-.03em;
+  background:linear-gradient(180deg,#ffffff 30%,#a9c4ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  opacity:0; animation:fadeUp .9s ease forwards .25s;
+}
+.hero p.tagline{
+  font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:clamp(18px,2.6vw,26px);color:var(--neon);margin-top:22px;letter-spacing:-.01em;
+  opacity:0; animation:fadeUp .9s ease forwards .4s;
+}
+.hero p.sub{max-width:560px;color:var(--text-dim);font-size:16px;line-height:1.7;margin-top:22px;
+  opacity:0; animation:fadeUp .9s ease forwards .55s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---------- radar ---------- */
+.radar{position:relative;width:420px;height:420px;max-width:90vw;max-height:90vw;margin-top:56px;
+  opacity:0;animation:fadeUp 1s ease forwards .7s;}
+.ring{position:absolute;border:1px solid rgba(79,156,255,0.18);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+.ring.r1{width:100%;height:100%;}
+.ring.r2{width:70%;height:70%;}
+.ring.r3{width:40%;height:40%;}
+.pulse{position:absolute;top:50%;left:50%;width:40%;height:40%;border-radius:50%;transform:translate(-50%,-50%);
+  border:1px solid var(--neon-soft);animation:pulseOut 3.2s cubic-bezier(.2,.6,.4,1) infinite;}
+.pulse.p2{animation-delay:1.05s;}
+.pulse.p3{animation-delay:2.1s;}
+@keyframes pulseOut{0%{width:20%;height:20%;opacity:.9;}100%{width:100%;height:100%;opacity:0;}}
+.core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#bcdcff,var(--neon) 60%,#1c4faa 100%);
+  box-shadow:0 0 40px 6px var(--neon-soft);display:flex;align-items:center;justify-content:center;z-index:3;}
+.core svg{width:26px;height:26px;fill:#fff;}
+.node{position:absolute;width:44px;height:44px;border-radius:14px;background:var(--surface);
+  border:1px solid var(--surface-border);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;
+  font-size:18px;z-index:2;box-shadow:0 6px 20px rgba(0,0,0,0.35);}
+.node.n1{top:2%;left:50%;transform:translate(-50%,0);}
+.node.n2{top:20%;right:0%;}
+.node.n3{bottom:20%;right:2%;}
+.node.n4{bottom:2%;left:50%;transform:translate(-50%,0);}
+.node.n5{bottom:20%;left:2%;}
+.node.n6{top:20%;left:0%;}
+
+/* ---------- section shell ---------- */
+section{padding:150px 0;position:relative;}
+.section-head{max-width:640px;margin-bottom:64px;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--neon-2);margin-bottom:16px;display:block;}
+.section-head h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:-.02em;line-height:1.15;}
+.section-head p{color:var(--text-dim);margin-top:18px;font-size:16px;line-height:1.75;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ---------- overview grid ---------- */
+.ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+.ov-card{background:var(--surface);border:1px solid var(--surface-border);border-radius:20px;padding:32px;backdrop-filter:blur(8px);}
+.ov-card h3{font-family:'Space Grotesk',sans-serif;font-size:20px;margin-bottom:14px;color:var(--neon-2);}
+.ov-card ul{list-style:none;}
+.ov-card li{color:var(--text-dim);font-size:14.5px;line-height:1.9;padding-left:20px;position:relative;}
+.ov-card li:before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--neon);}
+
+/* ---------- architecture ---------- */
+.flow{max-width:640px;margin:0 auto;position:relative;}
+.flow:before{content:'';position:absolute;left:23px;top:14px;bottom:14px;width:1px;
+  background:linear-gradient(180deg,var(--neon),rgba(34,211,238,0.15));}
+.layer{display:flex;gap:24px;padding:18px 0;position:relative;}
+.layer .dot{flex:none;width:48px;height:48px;border-radius:50%;background:var(--bg-2);border:1px solid var(--neon-soft);
+  display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--neon-2);z-index:2;}
+.layer .body h4{font-family:'Space Grotesk',sans-serif;font-size:17px;margin-bottom:4px;}
+.layer .body p{color:var(--text-dim);font-size:14px;line-height:1.6;}
+.devices-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:56px;justify-content:center;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-dim);border:1px solid var(--surface-border);
+  background:var(--surface);padding:8px 16px;border-radius:100px;}
+
+/* ---------- features ---------- */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;}
+.feat-card{background:var(--surface);border:1px solid var(--surface-border);border-radius:16px;padding:24px;
+  transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;}
+.feat-card:hover{transform:translateY(-4px);border-color:var(--neon-soft);box-shadow:0 12px 32px rgba(79,156,255,0.12);}
+.feat-card .num{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dimmer);}
+.feat-card h4{font-family:'Space Grotesk',sans-serif;font-size:16.5px;margin:8px 0 10px;color:var(--text);}
+.feat-card p{color:var(--text-dim);font-size:13.5px;line-height:1.65;}
+
+/* ---------- use cases ---------- */
+.uc-scroll{display:flex;gap:18px;overflow-x:auto;padding-bottom:20px;scrollbar-width:none;}
+.uc-scroll::-webkit-scrollbar{display:none;}
+.uc-card{flex:none;width:250px;background:linear-gradient(160deg,rgba(79,156,255,0.08),rgba(255,255,255,0.02));
+  border:1px solid var(--surface-border);border-radius:18px;padding:26px;}
+.uc-card .icon{font-size:26px;margin-bottom:16px;display:block;}
+.uc-card h4{font-family:'Space Grotesk',sans-serif;font-size:16px;margin-bottom:10px;}
+.uc-card p{color:var(--text-dim);font-size:13.5px;line-height:1.65;}
+
+/* ---------- footer ---------- */
+footer{padding:100px 0 60px;text-align:center;border-top:1px solid var(--surface-border);}
+footer .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;}
+footer p{color:var(--text-dimmer);font-size:13px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+
+@media(max-width:720px){
+  .ov-grid{grid-template-columns:1fr;}
+  .progress-rail{display:none;}
+  section{padding:100px 0;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-rail" id="rail">
+  <span data-target="hero" class="active"></span>
+  <span data-target="overview"></span>
+  <span data-target="architecture"></span>
+  <span data-target="features"></span>
+  <span data-target="usecases"></span>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="eyebrow mono">AI-POWERED BLUETOOTH ENGINE</div>
+  <h1>MultiLink</h1>
+  <p class="tagline">Connect Everything. Simultaneously.</p>
+  <p class="sub">An intelligent Bluetooth management layer that connects, prioritizes, and routes every device around you — at once, without you touching a settings menu.</p>
+
+  <div class="radar">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="pulse p1"></div>
+    <div class="pulse p2"></div>
+    <div class="pulse p3"></div>
+    <div class="node n1">🎧</div>
+    <div class="node n2">⌚</div>
+    <div class="node n3">🔊</div>
+    <div class="node n4">🚗</div>
+    <div class="node n5">🖥️</div>
+    <div class="node n6">🎮</div>
+    <div class="core">
+      <svg viewBox="0 0 24 24"><path d="M12 2v20M12 2l5 4-5 4M12 10l5 4-5 4M12 10l-5 4 5 4"/></svg>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-head reveal">
+    <span class="tag">01 · Overview</span>
+    <h2>Bluetooth wasn't built for this many devices.</h2>
+    <p>Today's phones connect to one or two things well. Everything past that means manual switching, dropped audio, and unpredictable latency. MultiLink replaces that with a single orchestration layer built for a world where every person carries five to ten Bluetooth devices.</p>
+  </div>
+  <div class="ov-grid">
+    <div class="ov-card reveal">
+      <h3>The Problem</h3>
+      <ul>
+        <li>Limited simultaneous audio connections</li>
+        <li>Manual, disruptive device switching</li>
+        <li>No intelligent prioritization</li>
+        <li>Bandwidth conflicts between devices</li>
+        <li>Rising latency as devices are added</li>
+      </ul>
+    </div>
+    <div class="ov-card reveal">
+      <h3>The Solution</h3>
+      <ul>
+        <li>Simultaneous multi-device connectivity</li>
+        <li>AI-driven priority and scheduling</li>
+        <li>Dynamic, real-time bandwidth allocation</li>
+        <li>Context-aware automation by activity</li>
+        <li>One dashboard for every connected device</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-head reveal">
+    <span class="tag">02 · Architecture</span>
+    <h2>One engine, eleven layers, zero manual switching.</h2>
+    <p>Each layer owns exactly one job — which is what lets MultiLink stay predictable as more devices, and future Bluetooth standards, are added.</p>
+  </div>
+  <div class="flow" id="flow"></div>
+  <div class="devices-row" id="devices-row"></div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-head reveal">
+    <span class="tag">03 · Key Features</span>
+    <h2>Twenty capabilities. One connected system.</h2>
+    <p>Every feature below plugs into the same core engine — combine them and you get modes like Gaming and Meeting, built entirely from these primitives.</p>
+  </div>
+  <div class="feat-grid" id="feat-grid"></div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="section-head reveal">
+    <span class="tag">04 · Real-World Use Cases</span>
+    <h2>Built for how people actually move through a day.</h2>
+    <p>Scroll sideways →</p>
+  </div>
+  <div class="uc-scroll" id="uc-scroll"></div>
+</section>
+
+</div>
+
+<footer>
+  <div class="logo">MultiLink</div>
+  <p>CONNECT EVERYTHING. SIMULTANEOUSLY.</p>
+</footer>
+
+<script>
+const layers = [
+  ["01","Applications","Music, calls, gaming, video, voice assistants, smart-home apps"],
+  ["02","Bluetooth Manager","OS-level entry point that exposes device state to apps"],
+  ["03","MultiLink Core Engine","Central orchestration layer coordinating every sub-system"],
+  ["04","AI Scheduler","Predicts device usage patterns and pre-allocates resources"],
+  ["05","Bandwidth Manager","Dynamically allocates radio bandwidth across active links"],
+  ["06","Priority Manager","Ranks devices by context — a call outranks background music"],
+  ["07","Audio Router","Directs the right audio stream to the right device"],
+  ["08","Connection Manager","Handles pairing, reconnection, and link supervision"],
+  ["09","Bluetooth Stack","HCI, L2CAP, RFCOMM, GATT, LE Audio & Auracast profiles"],
+  ["10","Bluetooth Chip","The physical radio — Classic, LE, and Mesh capable"],
+  ["11","Connected Devices","Every accessory in a person's world, managed as one"],
+];
+const flow = document.getElementById('flow');
+layers.forEach(([n,title,desc])=>{
+  const el = document.createElement('div');
+  el.className='layer reveal';
+  el.innerHTML = `<div class="dot mono">${n}</div><div class="body"><h4>${title}</h4><p>${desc}</p></div>`;
+  flow.appendChild(el);
+});
+
+const devices = ["Earbuds","Speakers","Smartwatch","Laptop","Tablet","TV","Keyboard","Mouse","Car","Game Controller","Printer","Camera","Smart Home"];
+const devRow = document.getElementById('devices-row');
+devices.forEach(d=>{
+  const el = document.createElement('span');
+  el.className='chip reveal';
+  el.textContent = d;
+  devRow.appendChild(el);
+});
+
+const features = [
+  ["Unlimited Bluetooth Pairing","Removes the practical cap on paired devices via a rotating profile cache for instant reconnects."],
+  ["Multi-Device Connectivity","Maintains multiple simultaneous active links across Classic and LE radios at once."],
+  ["Smart Audio Routing","Automatically sends the right stream to the right output based on context."],
+  ["Dynamic Bandwidth Allocation","Reallocates radio bandwidth in real time so urgent traffic is never starved."],
+  ["AI Device Priority Engine","An on-device model ranks connected devices by predicted importance."],
+  ["Battery Optimization","Groups low-power devices and extends connection intervals to save charge."],
+  ["Bluetooth Scheduler","A time-slot scheduler minimizes collisions across many concurrent links."],
+  ["Context-Aware Automation","Learns recurring patterns and pre-connects devices automatically."],
+  ["Voice Assistant Integration","Control switching and modes hands-free through your assistant."],
+  ["Smart Home Connectivity","Brings Bluetooth Mesh devices into the same dashboard as your accessories."],
+  ["Gaming Mode","Locks in a low-latency path for controller and headset instantly."],
+  ["Meeting Mode","Routes call audio to a headset the moment a meeting starts."],
+  ["Office Mode","Keeps peripherals responsive while background audio keeps playing."],
+  ["Travel Mode","Reduces scanning to save battery when known devices are out of range."],
+  ["Family Sharing","Manages shared device pools with per-user priority and rules."],
+  ["Multi-Room Audio","Syncs playback across rooms via LE Audio broadcast, near-zero drift."],
+  ["Security & Encryption","Enforces LE Secure Connections and flags unexpected pairing attempts."],
+  ["Device Profiles","Remembers preferred codec, volume, and priority for every device."],
+  ["Bluetooth Diagnostics","Surfaces link quality and reconnection history per device."],
+  ["Performance Analytics","Aggregates stability and battery impact into clear trends."],
+];
+const featGrid = document.getElementById('feat-grid');
+features.forEach(([title,desc],i)=>{
+  const el = document.createElement('div');
+  el.className='feat-card reveal';
+  el.innerHTML = `<div class="num mono">${String(i+1).padStart(2,'0')}</div><h4>${title}</h4><p>${desc}</p>`;
+  featGrid.appendChild(el);
+});
+
+const useCases = [
+  ["🏠","Home","Auto-connects the speaker, watch, and smart lights the moment you walk in."],
+  ["🏢","Office","Reconnects your dock, keyboard, and mouse while staying call-ready."],
+  ["🎮","Gaming","Locks a low-latency path for controller and headset during play."],
+  ["🚗","Car","Prioritizes hands-free calling and navigation the second you get in."],
+  ["💪","Gym","Keeps workout earbuds and heart-rate data stable and prioritized."],
+  ["📞","Meeting","Switches audio to your headset the instant a call starts."],
+  ["🏛️","Conference Room","Broadcasts one Auracast stream to every attendee's earbuds."],
+  ["🎓","Education","Lets a whole classroom listen to one broadcast, no pairing needed."],
+  ["🩺","Healthcare","Gives vital-sign wearables priority, stable, encrypted bandwidth."],
+  ["🏭","Industrial","Shares bandwidth predictably across scanners, headsets, and sensors."],
+  ["🔌","Smart Home","Manages Mesh switches, locks, and sensors alongside your devices."],
+  ["✈️","Travel","Minimizes scanning to save battery, reconnects the moment you land."],
+];
+const ucScroll = document.getElementById('uc-scroll');
+useCases.forEach(([icon,title,desc])=>{
+  const el = document.createElement('div');
+  el.className='uc-card reveal';
+  el.innerHTML = `<span class="icon">${icon}</span><h4>${title}</h4><p>${desc}</p>`;
+  ucScroll.appendChild(el);
+});
+
+// scroll reveal
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach((el,i)=>{
+  el.style.transitionDelay = (Math.min(i%8,8)*0.06)+'s';
+  io.observe(el);
+});
+
+// nav rail active state
+const sections = ['hero','overview','architecture','features','usecases'].map(id=>document.getElementById(id));
+const dots = document.querySelectorAll('#rail span');
+const secObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      dots.forEach(d=>d.classList.remove('active'));
+      const match = document.querySelector(`#rail span[data-target="${e.target.id}"]`);
+      if(match) match.classList.add('active');
+    }
+  });
+},{threshold:0.5});
+sections.forEach(s=>secObserver.observe(s));
+</script>
+</body>
+</html>
